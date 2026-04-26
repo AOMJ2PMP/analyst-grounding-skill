@@ -108,6 +108,10 @@ v0.1 (current)
 v0.2 (next)
   云知 (内部知识库)                    via Playwright (browser automation)
     依赖：用户能登录云知 + Tencent IT 允许浏览器自动化
+  query-decomposition: 候选池 < 8 时主动 surface "候选池不够" warning
+    背景：跑 demo Q5 (Gartner Security 5 features) 时候选池只有 5 个产品，
+         勉强凑够题目要的 5 条但完全无 fallback；
+         应在 Phase 1 拆解完就提示团队补充候选 (内部产品 list / 路演 deck)
 
 v0.3 (next next)
   公众号 (mp.weixin.qq.com)           via WeRSS / RSSHub (discovery) + Firecrawl (scrape)
