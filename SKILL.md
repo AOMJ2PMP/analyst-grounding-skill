@@ -2,7 +2,7 @@
 name: analyst-grounding
 description: |
   从 Tencent Cloud 自有源（文档 / 云知 / 公众号）抓事实给 analyst-wording skill 用的 grounding skill。
-  v0.1 只支持 cloud.tencent.com/document（公开文档，Firecrawl）。
+  v0.1 支持 cloud.tencent.com/document（中文文档）+ www.tencentcloud.com/document（国际站英文文档），都用 Firecrawl 抓。
   v0.2 加云知（Playwright 浏览器自动化）。v0.3 加公众号（WeRSS / RSSHub 发现 URL + Firecrawl 抓正文）。
   每条 evidence 都带 audit chain：[CITED] / [INFERRED] / [REVIEW: product] / [REVIEW: Kevin]。
   输出格式 = analyst-wording 的 Phase 2 evidence input 格式，handoff 干净。
