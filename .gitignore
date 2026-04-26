@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Local-only working state (not part of public skill)
+.local/
+.cache/
+
+# Tencent-specific evidence packages output (contains internal data)
+evidence-output/
+*.evidence.md
+
+# Wechat manifest (contains URLs from internal subscription)
+wechat-manifest.json
+
+# Auth / credentials
+.env
+.envrc
+*.token
+config/credentials.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Tool outputs
+*.log
