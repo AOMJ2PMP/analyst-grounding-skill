@@ -89,9 +89,9 @@ Security 候选产品池：
 
 ---
 
-### Phase 2: Source 抓取
+### Phase 2: Source 抓取（含 cache）
 
-详见 [references/source-access-mechanics.md](references/source-access-mechanics.md)。
+详见 [references/source-access-mechanics.md](references/source-access-mechanics.md) + [references/cache-and-context.md](references/cache-and-context.md)。
 
 **v0.1 范围**：
 
@@ -100,6 +100,18 @@ Security 候选产品池：
 - ⏳ 云知（v0.2，via Playwright）
 - ⏳ 公众号（v0.3，via WeRSS / RSSHub 发现 + Firecrawl 抓）
 
+**抓取流程（每个候选 URL 都走这个 cascade）**：
+
+```
+L1 (session memory)  → hit? 直接用
+                       miss? ↓
+L2 (disk cache)      → hit + fresh (TTL 内)? 读 cache 文件
+                       hit + stale? 重新 fetch
+                       miss? ↓
+L3 (Firecrawl fetch) → success? 写 cache + 用
+                       fail? 标 [REVIEW: product]
+```
+
 **v0.1 抓取规则**：
 
 1. 对每个候选产品，先抓 product overview 页（`.../product/<id>` 或 `.../product/<id>/<overview-section>`）
@@ -107,7 +119,9 @@ Security 候选产品池：
 3. 国际版优先（如果 EN 版本完整覆盖）；国内独有功能回落中文版
 4. 同步抓子页（feature list、SLA、pricing）—— 通常 sitemap 直接给
 
-抓回来的内容**不直接用**——要进 Phase 3 做 audit-tagged 抽取。
+**Cache 命中 = 不调 Firecrawl，零 token 成本读硬盘**。跨题目重复抓 CFW 文档的浪费由此消除。
+
+抓回来的内容（无论来自 cache 还是 fresh fetch）**不直接进 context**——要先 grep 过滤再 Phase 3 抽取。详见 cache-and-context.md 的 4 条 context 规则。
 
 ---
 
@@ -279,8 +293,9 @@ Hand-off note for wording skill:
 1. [references/audit-chain-format.md](references/audit-chain-format.md) — `[CITED]` / `[INFERRED]` / `[REVIEW]` 格式规范（Phase 3）
 2. [references/source-priority.md](references/source-priority.md) — 冲突解决 + freshness 规则（Phase 4）
 3. [references/source-access-mechanics.md](references/source-access-mechanics.md) — 各 source 的访问方式 + v0.1 / v0.2 / v0.3 roadmap（Phase 2）
-4. [references/query-decomposition.md](references/query-decomposition.md) — 题目 → 产品候选池 → search query 的拆解方法（Phase 1）
-5. [references/handoff-to-wording.md](references/handoff-to-wording.md) — 输出 schema，对齐 wording skill input（Phase 5）
+4. [references/cache-and-context.md](references/cache-and-context.md) — 三层 cache + 1M context 性能规则（Phase 2, 3）
+5. [references/query-decomposition.md](references/query-decomposition.md) — 题目 → 产品候选池 → search query 的拆解方法（Phase 1）
+6. [references/handoff-to-wording.md](references/handoff-to-wording.md) — 输出 schema，对齐 wording skill input（Phase 5）
 
 ---
 
